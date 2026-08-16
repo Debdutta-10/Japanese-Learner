@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hiragana Flashcard Learner</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <section id="landing" class="panel active">
+        <div class="hero">
+          <p class="eyebrow">Japanese study</p>
+          <h1>Hiragana Flashcard Learner</h1>
+          <p class="subtitle">
+            Pick the rows you want to practice, then build real momentum with focused repetition.
+          </p>
+        </div>
+
+        <div class="selection-panel">
+          <h2>Choose rows to learn</h2>
+
+          <div class="selection-toolbar">
+            <button id="select-all-btn" class="small-btn" type="button">Select all</button>
+            <button id="clear-btn" class="small-btn" type="button">Clear</button>
+            <button id="reset-progress-btn" class="small-btn ghost" type="button">Reset progress</button>
+          </div>
+
+          <div id="row-options" class="row-grid"></div>
+
+          <div class="study-settings">
+            <div class="setting-group">
+              <label>Study mode</label>
+              <div class="segmented-control">
+                <button class="mode-btn active" data-mode="mixed" type="button">Mixed</button>
+                <button class="mode-btn" data-mode="kana-to-romaji" type="button">Kana → Romaji</button>
+                <button class="mode-btn" data-mode="romaji-to-kana" type="button">Romaji → Kana</button>
+              </div>
+            </div>
+
+            <div class="setting-group">
+              <label for="session-length">Session length</label>
+              <select id="session-length">
+                <option value="all">All selected</option>
+                <option value="10">10 cards</option>
+                <option value="20">20 cards</option>
+                <option value="30">30 cards</option>
+              </select>
+            </div>
+
+            <div class="setting-group checkbox-row">
+              <label class="checkbox-wrap">
+                <input id="review-weak" type="checkbox" />
+                <span>Prioritize weak cards</span>
+              </label>
+            </div>
+          </div>
+
+          <button id="start-btn" class="primary-btn">Start learning</button>
+        </div>
+      </section>
+
+      <section id="quiz" class="panel hidden">
+        <div class="top-bar">
+          <span id="progress-text">0 / 0</span>
+          <span id="score-text">Score: 0</span>
+          <span id="streak-text">Streak: 0</span>
+        </div>
+
+        <div class="flashcard">
+          <div class="prompt-top">
+            <span id="mode-badge" class="mode-badge">Mixed</span>
+          </div>
+
+          <div id="kana-display" class="kana-display">あ</div>
+          <p id="prompt-text" class="prompt">Type the romaji for this hiragana</p>
+
+          <input
+            id="answer-input"
+            type="text"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="Type your answer"
+          />
+
+          <div class="quiz-actions">
+            <button id="submit-btn" class="primary-btn">Check</button>
+            <button id="show-answer-btn" class="secondary-btn">Show answer</button>
+            <button id="skip-btn" class="secondary-btn">Skip</button>
+            <button id="exit-btn" class="danger-btn" type="button">Exit</button>
+          </div>
+
+          <p id="feedback" class="feedback" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section id="results" class="panel hidden">
+        <div class="results-box">
+          <p class="eyebrow">Session complete</p>
+          <h2>Final score</h2>
+          <div id="final-score" class="final-score">0 / 0</div>
+          <p id="score-summary" class="score-summary">Nice work!</p>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span>Correct</span>
+              <strong id="correct-stat">0</strong>
+            </div>
+            <div class="stat-card">
+              <span>Accuracy</span>
+              <strong id="accuracy-stat">0%</strong>
+            </div>
+            <div class="stat-card">
+              <span>Best streak</span>
+              <strong id="streak-stat">0</strong>
+            </div>
+          </div>
+
+          <p id="weak-rows" class="weak-rows"></p>
+
+          <div class="result-actions">
+            <button id="restart-btn" class="primary-btn">Try again</button>
+            <button id="back-btn" class="secondary-btn">Choose rows</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
