@@ -101,6 +101,7 @@ const hiraganaRows = {
 };
 
 const STORAGE_KEY = 'hiragana-flashcard-progress';
+const THEME_KEY = 'hiragana-theme';
 const rowOptions = document.getElementById('row-options');
 const landingPanel = document.getElementById('landing');
 const quizPanel = document.getElementById('quiz');
@@ -127,11 +128,16 @@ const accuracyStatText = document.getElementById('accuracy-stat');
 const streakStatText = document.getElementById('streak-stat');
 const sessionLengthSelect = document.getElementById('session-length');
 const reviewWeakCheckbox = document.getElementById('review-weak');
+const timedModeCheckbox = document.getElementById('timed-mode');
 const modeButtons = document.querySelectorAll('.mode-btn');
 const modeBadge = document.getElementById('mode-badge');
 const selectAllBtn = document.getElementById('select-all-btn');
 const clearBtn = document.getElementById('clear-btn');
 const resetProgressBtn = document.getElementById('reset-progress-btn');
+const darkModeBtn = document.getElementById('dark-mode-btn');
+const audioBtn = document.getElementById('audio-btn');
+const timerDisplay = document.getElementById('timer-display');
+const timerValue = document.getElementById('timer-value');
 
 let deck = [];
 let currentIndex = 0;
@@ -145,6 +151,10 @@ let currentMode = 'mixed';
 let currentPromptType = 'romaji';
 let currentCard = null;
 let mastery = loadMastery();
+let timerInterval = null;
+let timeRemaining = 15;
+let isTimedMode = false;
+let isDarkMode = loadTheme();
 
 function loadMastery() {
   try {
@@ -157,6 +167,70 @@ function loadMastery() {
 
 function saveMastery() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(mastery));
+}
+
+function loadTheme() {
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved) return saved === 'dark';
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
+function saveTheme(isDark) {
+  localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+}
+
+function toggleDarkMode() {
+  isDarkMode = !isDarkMode;
+  document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+  saveTheme(isDarkMode);
+}
+
+function initTheme() {
+  document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+  darkModeBtn.textContent = isDarkMode ? '☀️' : '🌙';
+}
+
+function speakHiragana(kana, romaji) {
+  if (!('speechSynthesis' in window)) {
+    alert('Text-to-speech not supported in your browser');
+    return;
+  }
+  
+  const utterance = new SpeechSynthesisUtterance(kana);
+  utterance.lang = 'ja-JP';
+  utterance.rate = 0.8;
+  utterance.pitch = 1;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
+}
+
+function startTimer() {
+  if (!isTimedMode) return;
+  
+  timeRemaining = 15;
+  timerDisplay.classList.remove('hidden');
+  timerValue.textContent = '15';
+  
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timeRemaining -= 1;
+    timerValue.textContent = String(timeRemaining);
+    
+    if (timeRemaining <= 0) {
+      clearInterval(timerInterval);
+      showFeedback('⏱️ Time is up!', 'incorrect');
+      handleWrongAnswer();
+      finishCurrentCard();
+    } else if (timeRemaining <= 5) {
+      timerValue.style.color = 'var(--danger)';
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  timerDisplay.classList.add('hidden');
+  timerValue.style.color = '';
 }
 
 function getCardId(card) {
@@ -276,7 +350,12 @@ function prepareDeck() {
   );
 
   if (reviewWeakCheckbox.checked) {
-    items = items.sort((a, b) => getCardAccuracy(a) - getCardAccuracy(b));
+    // Spaced repetition: sort by accuracy (worst first) and duplicate weak cards
+    items.sort((a, b) => getCardAccuracy(a) - getCardAccuracy(b));
+    
+    // Add weak cards (accuracy < 70%) again to the end for reinforcement
+    const weakCards = items.filter(card => getCardAccuracy(card) < 70);
+    items = items.concat(weakCards);
   }
 
   items = shuffle(items);
@@ -318,6 +397,7 @@ function nextCard() {
   feedback.textContent = '';
   feedback.className = 'feedback';
   updateProgress();
+  startTimer();
 }
 
 function handleCorrectAnswer() {
@@ -339,6 +419,7 @@ function handleWrongAnswer() {
 function finishCurrentCard() {
   sessionTotalAnswered += 1;
   currentIndex += 1;
+  stopTimer();
   answerInput.disabled = true;
   submitBtn.disabled = true;
   showAnswerBtn.disabled = true;
@@ -427,6 +508,7 @@ function startQuiz() {
     return;
   }
 
+  isTimedMode = timedModeCheckbox.checked;
   deck = prepareDeck();
   currentIndex = 0;
   score = 0;
@@ -447,6 +529,7 @@ function startQuiz() {
 }
 
 function resetSessionState() {
+  stopTimer();
   deck = [];
   currentIndex = 0;
   score = 0;
@@ -503,6 +586,12 @@ backBtn.addEventListener('click', resetToLanding);
 showAnswerBtn.addEventListener('click', revealAnswer);
 skipBtn.addEventListener('click', skipCard);
 exitBtn.addEventListener('click', exitSession);
+darkModeBtn.addEventListener('click', toggleDarkMode);
+audioBtn.addEventListener('click', () => {
+  if (currentCard) {
+    speakHiragana(currentCard.kana, currentCard.romaji);
+  }
+});
 answerInput.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
     handleAnswerSubmit();
@@ -519,3 +608,4 @@ resetProgressBtn.addEventListener('click', resetProgress);
 
 buildRowSelector();
 setMode('mixed');
+initTheme();

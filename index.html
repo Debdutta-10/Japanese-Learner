@@ -8,6 +8,10 @@
   </head>
   <body>
     <div class="app-shell">
+      <div class="theme-toggle">
+        <button id="dark-mode-btn" class="theme-btn" title="Toggle dark mode">🌙</button>
+      </div>
+      
       <section id="landing" class="panel active">
         <div class="hero">
           <p class="eyebrow">Japanese study</p>
@@ -54,6 +58,13 @@
                 <span>Prioritize weak cards</span>
               </label>
             </div>
+
+            <div class="setting-group checkbox-row">
+              <label class="checkbox-wrap">
+                <input id="timed-mode" type="checkbox" />
+                <span>Timed mode (15s per card)</span>
+              </label>
+            </div>
           </div>
 
           <button id="start-btn" class="primary-btn">Start learning</button>
@@ -65,6 +76,7 @@
           <span id="progress-text">0 / 0</span>
           <span id="score-text">Score: 0</span>
           <span id="streak-text">Streak: 0</span>
+          <span id="timer-display" class="timer-display hidden">⏱️ <span id="timer-value">15</span>s</span>
         </div>
 
         <div class="flashcard">
@@ -72,7 +84,10 @@
             <span id="mode-badge" class="mode-badge">Mixed</span>
           </div>
 
-          <div id="kana-display" class="kana-display">あ</div>
+          <div class="kana-section">
+            <div id="kana-display" class="kana-display">あ</div>
+            <button id="audio-btn" class="audio-btn" title="Pronounce">🔊</button>
+          </div>
           <p id="prompt-text" class="prompt">Type the romaji for this hiragana</p>
 
           <input
