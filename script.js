@@ -106,7 +106,20 @@ const rowOptions = document.getElementById('row-options');
 const landingPanel = document.getElementById('landing');
 const quizPanel = document.getElementById('quiz');
 const resultsPanel = document.getElementById('results');
+const gamePanel = document.getElementById('game');
 const startBtn = document.getElementById('start-btn');
+const gameStartBtn = document.getElementById('game-start-btn');
+const gameExitBtn = document.getElementById('game-exit-btn');
+const gameCanvas = document.getElementById('game-canvas');
+const gameChoices = document.getElementById('game-choices');
+const gamePrompt = document.getElementById('game-prompt');
+const gameKana = document.getElementById('game-kana');
+const gameProgress = document.getElementById('game-progress');
+const gameScore = document.getElementById('game-score');
+const gameFeedback = document.getElementById('game-feedback');
+const gamePauseBtn = document.getElementById('game-pause-btn');
+const gameSpeedInput = document.getElementById('game-speed');
+const gameSpeedValue = document.getElementById('game-speed-value');
 const submitBtn = document.getElementById('submit-btn');
 const showAnswerBtn = document.getElementById('show-answer-btn');
 const skipBtn = document.getElementById('skip-btn');
@@ -138,6 +151,10 @@ const darkModeBtn = document.getElementById('dark-mode-btn');
 const audioBtn = document.getElementById('audio-btn');
 const timerDisplay = document.getElementById('timer-display');
 const timerValue = document.getElementById('timer-value');
+const levelText = document.getElementById('level-text');
+const xpFill = document.getElementById('xp-fill');
+const xpText = document.getElementById('xp-text');
+const xpEarnedText = document.getElementById('xp-earned');
 
 let deck = [];
 let currentIndex = 0;
@@ -155,6 +172,232 @@ let timerInterval = null;
 let timeRemaining = 15;
 let isTimedMode = false;
 let isDarkMode = loadTheme();
+let totalXp = Number(localStorage.getItem('hiragana-xp') || 0);
+let gameDeck = [];
+let gameIndex = 0;
+let gameCoins = 0;
+let gameAnimation = null;
+let gameWallX = 760;
+let gameLastFrame = 0;
+let gameOver = false;
+let gameLane = 1;
+let gameWallDepth = 0;
+let gameWallChoices = [];
+let gamePaused = false;
+
+function getGameSpeed() {
+  return Number(gameSpeedInput.value) * 0.00012;
+}
+
+function updateGameSpeedLabel() {
+  const labels = ['Very slow', 'Slow', 'Relaxed', 'Fast', 'Very fast'];
+  gameSpeedValue.textContent = labels[Number(gameSpeedInput.value) - 1];
+}
+
+function updateXpDisplay() {
+  const level = Math.floor(totalXp / 100) + 1;
+  const levelXp = totalXp % 100;
+  levelText.textContent = String(level);
+  xpText.textContent = `${totalXp} XP`;
+  xpFill.style.width = `${levelXp}%`;
+}
+
+function awardXp(amount) {
+  totalXp += amount;
+  localStorage.setItem('hiragana-xp', String(totalXp));
+  updateXpDisplay();
+}
+
+function drawGameScene() {
+  const context = gameCanvas.getContext('2d');
+  context.imageSmoothingEnabled = false;
+  const width = gameCanvas.width;
+  const horizonY = 70;
+  const collisionY = 238;
+  context.fillStyle = '#17213d';
+  context.fillRect(0, 0, width, gameCanvas.height);
+  context.fillStyle = '#263b64';
+  for (let x = 0; x < width; x += 48) context.fillRect(x, 32 + (x % 3) * 8, 24, 5);
+  context.fillStyle = '#f7c948';
+  context.fillRect(60, 52, 8, 8);
+  context.fillRect(68, 44, 8, 8);
+  context.fillStyle = '#344365';
+  context.fillRect(0, horizonY, width, 168);
+  context.fillStyle = '#52628b';
+  context.beginPath();
+  context.moveTo(330, horizonY);
+  context.lineTo(510, horizonY);
+  context.lineTo(width, collisionY);
+  context.lineTo(0, collisionY);
+  context.closePath();
+  context.fill();
+  context.strokeStyle = '#f7c948';
+  context.lineWidth = 4;
+  [0, 1, 2, 3].forEach((line) => {
+    const bottomX = line * 280;
+    const topX = 330 + line * 60;
+    context.beginPath();
+    context.moveTo(topX, horizonY);
+    context.lineTo(bottomX, collisionY);
+    context.stroke();
+  });
+  const wallScale = 0.22 + gameWallDepth * 0.78;
+  const wallWidth = 42 + wallScale * 72;
+  const wallHeight = 36 + wallScale * 92;
+  const wallY = horizonY + (collisionY - horizonY) * gameWallDepth - wallHeight;
+  gameWallChoices.forEach((choice, index) => {
+    const laneCenter = 140 + index * 280;
+    const wallX = laneCenter - wallWidth / 2;
+    context.fillStyle = index === gameLane ? '#ffdf70' : '#ff6b6b';
+    context.fillRect(wallX, wallY, wallWidth, wallHeight);
+    context.fillStyle = '#943f54';
+    context.fillRect(wallX + wallWidth * 0.15, wallY + wallHeight * 0.18, wallWidth * 0.7, 6 * wallScale);
+    context.fillRect(wallX + wallWidth * 0.15, wallY + wallHeight * 0.5, wallWidth * 0.7, 6 * wallScale);
+    context.fillStyle = '#10152b';
+    context.font = `bold ${Math.max(14, 20 * wallScale)}px monospace`;
+    context.textAlign = 'center';
+    context.fillText(choice, laneCenter, wallY + wallHeight * 0.78);
+  });
+  context.fillStyle = '#fff8dc';
+  context.font = 'bold 18px monospace';
+  context.textAlign = 'center';
+  const ballX = 140 + gameLane * 280 - 18;
+  context.fillStyle = '#ffdf70';
+  context.fillRect(ballX, 214, 36, 24);
+  context.fillStyle = '#943f54';
+  context.fillRect(ballX + 12, 222, 12, 8);
+}
+
+function englishClue(card) {
+  const clues = {
+    a: 'A', i: 'E', u: 'OO', e: 'EH', o: 'OH',
+    ka: 'KAH', ki: 'KEY', ku: 'COO', ke: 'KEH', ko: 'COH',
+    sa: 'SAH', shi: 'SHE', su: 'SUE', se: 'SEH', so: 'SOH',
+    ta: 'TAH', chi: 'CHEE', tsu: 'TSOO', te: 'TEH', to: 'TOH'
+  };
+  return `${clues[card.romaji] || card.romaji.toUpperCase()} sound`;
+}
+
+function showGameCard(card) {
+  const clue = englishClue(card);
+  gamePrompt.textContent = 'Move into the lane with the matching Japanese character!';
+  gameKana.textContent = clue;
+  gameProgress.textContent = `STAGE ${gameIndex + 1} / ${gameDeck.length}`;
+  const answerPool = hiraganaRows.aiueo.items.concat(hiraganaRows.k.items, hiraganaRows.s.items, hiraganaRows.t.items)
+    .map(item => item.romaji).filter(answer => answer !== card.romaji);
+  const choices = shuffle([card.kana, ...shuffle(answerPool.map(answer => hiraganaRows.aiueo.items
+    .concat(hiraganaRows.k.items, hiraganaRows.s.items, hiraganaRows.t.items)
+    .find(item => item.romaji === answer)?.kana)).filter(Boolean).slice(0, 2)]);
+  gameWallChoices = choices;
+  gameChoices.innerHTML = '';
+  choices.forEach((choice, index) => {
+    const button = document.createElement('button');
+    button.className = 'game-choice';
+    button.type = 'button';
+    button.innerHTML = `<span>LANE ${index + 1}</span>${choice}`;
+    button.addEventListener('click', () => moveGameLane(index));
+    gameChoices.appendChild(button);
+  });
+  gameFeedback.textContent = 'The walls are coming! Use ← → or tap a lane.';
+  gameFeedback.className = 'game-feedback';
+  gameWallDepth = 0;
+  gameLastFrame = 0;
+  updateLaneSelection();
+  gameAnimation = requestAnimationFrame(rollWall);
+}
+
+function rollWall(timestamp) {
+  if (gameOver || gamePaused || !gameDeck[gameIndex]) return;
+  const elapsed = gameLastFrame ? timestamp - gameLastFrame : 0;
+  gameLastFrame = timestamp;
+  gameWallDepth += elapsed * getGameSpeed();
+  drawGameScene();
+  if (gameWallDepth >= 1) {
+    const isCorrectLane = gameWallChoices[gameLane] === gameDeck[gameIndex].kana;
+    if (isCorrectLane) breakWall();
+    else endGame(true);
+    return;
+  }
+  gameAnimation = requestAnimationFrame(rollWall);
+}
+
+function updateLaneSelection() {
+  [...gameChoices.children].forEach((button, index) => button.classList.toggle('selected', index === gameLane));
+  drawGameScene();
+}
+
+function moveGameLane(lane) {
+  if (gameOver || !gameDeck[gameIndex]) return;
+  gameLane = Math.max(0, Math.min(2, lane));
+  updateLaneSelection();
+}
+
+function toggleGamePause() {
+  if (gameOver || !gameDeck[gameIndex]) return;
+  gamePaused = !gamePaused;
+  gamePauseBtn.textContent = gamePaused ? 'Resume' : 'Pause';
+  gameFeedback.textContent = gamePaused ? 'PAUSED - choose a lane, then resume.' : 'The walls are coming! Use left and right.';
+  if (gamePaused) {
+    cancelAnimationFrame(gameAnimation);
+    gameAnimation = null;
+  } else {
+    gameLastFrame = 0;
+    gameAnimation = requestAnimationFrame(rollWall);
+  }
+}
+
+function breakWall() {
+  cancelAnimationFrame(gameAnimation);
+  gameAnimation = null;
+  gameCoins += 1;
+  awardXp(15);
+  gameFeedback.textContent = '★ Wall broken! +1 coin';
+  gameFeedback.className = 'game-feedback correct';
+  gameScore.textContent = `COINS ${gameCoins}`;
+  setTimeout(() => {
+    gameIndex += 1;
+    if (gameIndex >= gameDeck.length) endGame();
+    else showGameCard(gameDeck[gameIndex]);
+  }, 450);
+}
+
+function startGame() {
+  const selectedRows = getSelectedRows();
+  if (!selectedRows.length) {
+    alert('Please select at least one row before starting.');
+    return;
+  }
+  gameDeck = shuffle(selectedRows.flatMap(row => row.items)).slice(0, 8);
+  gameIndex = 0;
+  gameCoins = 0;
+  gameLane = 1;
+  gameOver = false;
+  gamePaused = false;
+  landingPanel.classList.add('hidden');
+  quizPanel.classList.add('hidden');
+  resultsPanel.classList.add('hidden');
+  gamePanel.classList.remove('hidden');
+  gameScore.textContent = 'COINS 0';
+  gamePauseBtn.textContent = 'Pause';
+  updateGameSpeedLabel();
+  showGameCard(gameDeck[0]);
+}
+
+function endGame(missedWall = false) {
+  if (gameOver) return;
+  gameOver = true;
+  if (gameAnimation) cancelAnimationFrame(gameAnimation);
+  gameAnimation = null;
+  gamePanel.classList.add('hidden');
+  resultsPanel.classList.remove('hidden');
+  finalScoreText.textContent = `${gameCoins} / ${gameDeck.length}`;
+  correctStatText.textContent = String(gameCoins);
+  accuracyStatText.textContent = `${Math.round((gameCoins / gameDeck.length) * 100)}%`;
+  streakStatText.textContent = 'RUN';
+  xpEarnedText.textContent = `+${gameCoins * 15} XP`;
+  scoreSummary.textContent = missedWall ? 'The wall reached the ball. Keep practicing!' : 'Run complete. Your kana power is growing!';
+  weakRowsText.textContent = missedWall ? 'Move faster next run and break every wall.' : 'Replay the course to sharpen your misses.';
+}
 
 function loadMastery() {
   try {
@@ -320,9 +563,9 @@ function showFeedback(message, type) {
 
 function updateProgress() {
   const currentNumber = Math.min(currentIndex + 1, totalCards);
-  progressText.textContent = `${currentNumber} / ${totalCards}`;
-  scoreText.textContent = `Score: ${score}`;
-  streakText.textContent = `Streak: ${streak}`;
+  progressText.textContent = `CARD ${currentNumber} / ${totalCards}`;
+  scoreText.textContent = `XP: ${score}`;
+  streakText.textContent = `COMBO x${streak}`;
 }
 
 function setMode(mode) {
@@ -402,6 +645,7 @@ function nextCard() {
 
 function handleCorrectAnswer() {
   score += 1;
+  awardXp(10 + Math.min(streak, 5));
   sessionCorrect += 1;
   streak += 1;
   bestStreak = Math.max(bestStreak, streak);
@@ -477,6 +721,7 @@ function endQuiz() {
   correctStatText.textContent = String(sessionCorrect);
   accuracyStatText.textContent = `${accuracy}%`;
   streakStatText.textContent = String(bestStreak);
+  xpEarnedText.textContent = `+${score * 10} XP`;
 
   const weakRows = Object.entries(hiraganaRows)
     .filter(([key, row]) => {
@@ -522,9 +767,9 @@ function startQuiz() {
   resultsPanel.classList.add('hidden');
   quizPanel.classList.remove('hidden');
 
-  scoreText.textContent = 'Score: 0';
-  streakText.textContent = 'Streak: 0';
-  progressText.textContent = `0 / ${totalCards}`;
+  scoreText.textContent = 'XP: 0';
+  streakText.textContent = 'COMBO x0';
+  progressText.textContent = `CARD 0 / ${totalCards}`;
   nextCard();
 }
 
@@ -542,9 +787,9 @@ function resetSessionState() {
   answerInput.value = '';
   feedback.textContent = '';
   feedback.className = 'feedback';
-  progressText.textContent = '0 / 0';
-  scoreText.textContent = 'Score: 0';
-  streakText.textContent = 'Streak: 0';
+  progressText.textContent = 'CARD 0 / 0';
+  scoreText.textContent = 'XP: 0';
+  streakText.textContent = 'COMBO x0';
 }
 
 function exitSession() {
@@ -559,9 +804,16 @@ function resetToLanding() {
   landingPanel.classList.remove('hidden');
   quizPanel.classList.add('hidden');
   resultsPanel.classList.add('hidden');
+  gamePanel.classList.add('hidden');
   answerInput.value = '';
   feedback.textContent = '';
   feedback.className = 'feedback';
+}
+
+function exitGame() {
+  if (gameAnimation) cancelAnimationFrame(gameAnimation);
+  gameAnimation = null;
+  resetToLanding();
 }
 
 function setAllRows(selected) {
@@ -580,6 +832,10 @@ function resetProgress() {
 }
 
 startBtn.addEventListener('click', startQuiz);
+gameStartBtn.addEventListener('click', startGame);
+gameExitBtn.addEventListener('click', exitGame);
+gamePauseBtn.addEventListener('click', toggleGamePause);
+gameSpeedInput.addEventListener('input', updateGameSpeedLabel);
 submitBtn.addEventListener('click', handleAnswerSubmit);
 restartBtn.addEventListener('click', startQuiz);
 backBtn.addEventListener('click', resetToLanding);
@@ -597,6 +853,13 @@ answerInput.addEventListener('keydown', (event) => {
     handleAnswerSubmit();
   }
 });
+document.addEventListener('keydown', (event) => {
+  if (gamePanel.classList.contains('hidden') || !['1', '2', '3', 'ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+  event.preventDefault();
+  if (event.key === 'ArrowLeft') moveGameLane(gameLane - 1);
+  else if (event.key === 'ArrowRight') moveGameLane(gameLane + 1);
+  else moveGameLane(Number(event.key) - 1);
+});
 
 modeButtons.forEach((button) => {
   button.addEventListener('click', () => setMode(button.dataset.mode));
@@ -609,3 +872,4 @@ resetProgressBtn.addEventListener('click', resetProgress);
 buildRowSelector();
 setMode('mixed');
 initTheme();
+updateXpDisplay();

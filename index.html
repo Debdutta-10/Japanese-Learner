@@ -13,8 +13,13 @@
       </div>
       
       <section id="landing" class="panel active">
+        <div class="player-hud" aria-label="Player progress">
+          <div class="player-badge">LV <strong id="level-text">1</strong></div>
+          <div class="xp-track"><span id="xp-fill"></span></div>
+          <span id="xp-text">0 XP</span>
+        </div>
         <div class="hero">
-          <p class="eyebrow">Japanese study</p>
+          <p class="eyebrow">[ QUEST 01 ] Japanese study</p>
           <h1>Hiragana Flashcard Learner</h1>
           <p class="subtitle">
             Pick the rows you want to practice, then build real momentum with focused repetition.
@@ -67,15 +72,37 @@
             </div>
           </div>
 
-          <button id="start-btn" class="primary-btn">Start learning</button>
+          <button id="start-btn" class="primary-btn">▶ Start quest</button>
+          <button id="game-start-btn" class="game-start-btn" type="button">● Roll & learn</button>
         </div>
+      </section>
+
+      <section id="game" class="panel hidden">
+        <div class="game-topbar">
+          <span id="game-progress">STAGE 1 / 8</span>
+          <span id="game-score">COINS 0</span>
+          <button id="game-exit-btn" class="danger-btn" type="button">Exit game</button>
+        </div>
+        <div class="game-intro">
+          <p class="eyebrow">[ KANA RUNNER ]</p>
+          <h2 id="game-prompt">Break the wall with the right Japanese answer!</h2>
+          <div id="game-kana" class="game-kana">a</div>
+        </div>
+        <canvas id="game-canvas" width="840" height="300" aria-label="Pixel art rolling ball and incoming Japanese answer wall"></canvas>
+        <div class="game-controls" aria-label="Game controls">
+          <button id="game-pause-btn" class="control-btn" type="button">Pause</button>
+          <label for="game-speed">Speed <span id="game-speed-value">Slow</span></label>
+          <input id="game-speed" type="range" min="1" max="5" value="2" />
+        </div>
+        <div id="game-choices" class="game-choices" aria-label="Answer choices"></div>
+        <p id="game-feedback" class="game-feedback" aria-live="polite">Choose a block to roll the ball.</p>
       </section>
 
       <section id="quiz" class="panel hidden">
         <div class="top-bar">
-          <span id="progress-text">0 / 0</span>
-          <span id="score-text">Score: 0</span>
-          <span id="streak-text">Streak: 0</span>
+          <span id="progress-text">CARD 0 / 0</span>
+          <span id="score-text">XP: 0</span>
+          <span id="streak-text">COMBO x0</span>
           <span id="timer-display" class="timer-display hidden">⏱️ <span id="timer-value">15</span>s</span>
         </div>
 
@@ -99,7 +126,7 @@
           />
 
           <div class="quiz-actions">
-            <button id="submit-btn" class="primary-btn">Check</button>
+            <button id="submit-btn" class="primary-btn">✓ Check</button>
             <button id="show-answer-btn" class="secondary-btn">Show answer</button>
             <button id="skip-btn" class="secondary-btn">Skip</button>
             <button id="exit-btn" class="danger-btn" type="button">Exit</button>
@@ -111,10 +138,11 @@
 
       <section id="results" class="panel hidden">
         <div class="results-box">
-          <p class="eyebrow">Session complete</p>
+          <p class="eyebrow">[ QUEST CLEAR ]</p>
           <h2>Final score</h2>
           <div id="final-score" class="final-score">0 / 0</div>
           <p id="score-summary" class="score-summary">Nice work!</p>
+          <div class="reward-banner">★ <span id="xp-earned">+0 XP</span> earned</div>
 
           <div class="stats-grid">
             <div class="stat-card">
