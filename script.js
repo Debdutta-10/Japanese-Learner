@@ -100,26 +100,293 @@ const hiraganaRows = {
   }
 };
 
+const vocabWords = [
+  { jp: 'わたし', en: ['i', 'me'] },
+  { jp: 'あなた', en: ['you'] },
+  { jp: 'かれ', en: ['he'] },
+  { jp: 'かのじょ', en: ['she'] },
+  { jp: 'せんせい', en: ['teacher'] },
+  { jp: 'がくせい', en: ['student'] },
+  { jp: 'ともだち', en: ['friend'] },
+  { jp: 'かぞく', en: ['family'] },
+  { jp: 'ちち', en: ['father'] },
+  { jp: 'はは', en: ['mother'] },
+  { jp: 'あに', en: ['older brother'] },
+  { jp: 'あね', en: ['older sister'] },
+  { jp: 'おとうと', en: ['younger brother'] },
+  { jp: 'いもうと', en: ['younger sister'] },
+  { jp: 'こども', en: ['child'] },
+  { jp: 'ひと', en: ['person'] },
+  { jp: 'なまえ', en: ['name'] },
+  { jp: 'にほん', en: ['japan'] },
+  { jp: 'にほんご', en: ['japanese'] },
+  { jp: 'えいご', en: ['english'] },
+  { jp: 'がっこう', en: ['school'] },
+  { jp: 'だいがく', en: ['university'] },
+  { jp: 'かいしゃ', en: ['company'] },
+  { jp: 'しごと', en: ['work', 'job'] },
+  { jp: 'びょういん', en: ['hospital'] },
+  { jp: 'えき', en: ['station'] },
+  { jp: 'みせ', en: ['shop', 'store'] },
+  { jp: 'ぎんこう', en: ['bank'] },
+  { jp: 'としょかん', en: ['library'] },
+  { jp: 'ゆうびんきょく', en: ['post office'] },
+  { jp: 'いえ', en: ['house', 'home'] },
+  { jp: 'へや', en: ['room'] },
+  { jp: 'まど', en: ['window'] },
+  { jp: 'どあ', en: ['door'] },
+  { jp: 'つくえ', en: ['desk'] },
+  { jp: 'いす', en: ['chair'] },
+  { jp: 'ほん', en: ['book'] },
+  { jp: 'じしょ', en: ['dictionary'] },
+  { jp: 'しんぶん', en: ['newspaper'] },
+  { jp: 'ざっし', en: ['magazine'] },
+  { jp: 'てがみ', en: ['letter'] },
+  { jp: 'かみ', en: ['paper'] },
+  { jp: 'えんぴつ', en: ['pencil'] },
+  { jp: 'ぺん', en: ['pen'] },
+  { jp: 'のうと', en: ['notebook'] },
+  { jp: 'とけい', en: ['clock', 'watch'] },
+  { jp: 'かさ', en: ['umbrella'] },
+  { jp: 'かばん', en: ['bag'] },
+  { jp: 'くつ', en: ['shoes'] },
+  { jp: 'ふく', en: ['clothes'] },
+  { jp: 'ぼうし', en: ['hat'] },
+  { jp: 'めがね', en: ['glasses'] },
+  { jp: 'くるま', en: ['car'] },
+  { jp: 'じてんしゃ', en: ['bicycle'] },
+  { jp: 'でんしゃ', en: ['train'] },
+  { jp: 'ばす', en: ['bus'] },
+  { jp: 'ひこうき', en: ['airplane'] },
+  { jp: 'ふね', en: ['boat', 'ship'] },
+  { jp: 'みち', en: ['road', 'way'] },
+  { jp: 'ちず', en: ['map'] },
+  { jp: 'くに', en: ['country'] },
+  { jp: 'まち', en: ['town'] },
+  { jp: 'むら', en: ['village'] },
+  { jp: 'うみ', en: ['sea'] },
+  { jp: 'かわ', en: ['river'] },
+  { jp: 'やま', en: ['mountain'] },
+  { jp: 'そら', en: ['sky'] },
+  { jp: 'てんき', en: ['weather'] },
+  { jp: 'あめ', en: ['rain'] },
+  { jp: 'ゆき', en: ['snow'] },
+  { jp: 'かぜ', en: ['wind'] },
+  { jp: 'はる', en: ['spring'] },
+  { jp: 'なつ', en: ['summer'] },
+  { jp: 'あき', en: ['autumn', 'fall'] },
+  { jp: 'ふゆ', en: ['winter'] },
+  { jp: 'あさ', en: ['morning'] },
+  { jp: 'ひる', en: ['noon', 'daytime'] },
+  { jp: 'よる', en: ['night'] },
+  { jp: 'きょう', en: ['today'] },
+  { jp: 'きのう', en: ['yesterday'] },
+  { jp: 'あした', en: ['tomorrow'] },
+  { jp: 'まいにち', en: ['every day'] },
+  { jp: 'いま', en: ['now'] },
+  { jp: 'じかん', en: ['time'] },
+  { jp: 'ふん', en: ['minute'] },
+  { jp: 'はん', en: ['half'] },
+  { jp: 'しゅう', en: ['week'] },
+  { jp: 'つき', en: ['moon', 'month'] },
+  { jp: 'とし', en: ['year'] },
+  { jp: 'げつようび', en: ['monday'] },
+  { jp: 'かようび', en: ['tuesday'] },
+  { jp: 'すいようび', en: ['wednesday'] },
+  { jp: 'もくようび', en: ['thursday'] },
+  { jp: 'きんようび', en: ['friday'] },
+  { jp: 'どようび', en: ['saturday'] },
+  { jp: 'にちようび', en: ['sunday'] },
+  { jp: 'いちがつ', en: ['january'] },
+  { jp: 'にがつ', en: ['february'] },
+  { jp: 'さんがつ', en: ['march'] },
+  { jp: 'しがつ', en: ['april'] },
+  { jp: 'ごがつ', en: ['may'] },
+  { jp: 'ろくがつ', en: ['june'] },
+  { jp: 'しちがつ', en: ['july'] },
+  { jp: 'はちがつ', en: ['august'] },
+  { jp: 'くがつ', en: ['september'] },
+  { jp: 'じゅうがつ', en: ['october'] },
+  { jp: 'じゅういちがつ', en: ['november'] },
+  { jp: 'じゅうにがつ', en: ['december'] },
+  { jp: 'いち', en: ['one'] },
+  { jp: 'に', en: ['two'] },
+  { jp: 'さん', en: ['three'] },
+  { jp: 'よん', en: ['four'] },
+  { jp: 'ご', en: ['five'] },
+  { jp: 'ろく', en: ['six'] },
+  { jp: 'なな', en: ['seven'] },
+  { jp: 'はち', en: ['eight'] },
+  { jp: 'きゅう', en: ['nine'] },
+  { jp: 'じゅう', en: ['ten'] },
+  { jp: 'ひゃく', en: ['hundred'] },
+  { jp: 'せん', en: ['thousand'] },
+  { jp: 'まん', en: ['ten thousand'] },
+  { jp: 'なに', en: ['what'] },
+  { jp: 'だれ', en: ['who'] },
+  { jp: 'どこ', en: ['where'] },
+  { jp: 'いつ', en: ['when'] },
+  { jp: 'どう', en: ['how'] },
+  { jp: 'どれ', en: ['which'] },
+  { jp: 'これ', en: ['this'] },
+  { jp: 'それ', en: ['that'] },
+  { jp: 'あれ', en: ['that over there'] },
+  { jp: 'ここ', en: ['here'] },
+  { jp: 'そこ', en: ['there'] },
+  { jp: 'あそこ', en: ['over there'] },
+  { jp: 'たべる', en: ['eat'] },
+  { jp: 'のむ', en: ['drink'] },
+  { jp: 'みる', en: ['see', 'watch'] },
+  { jp: 'きく', en: ['listen', 'ask'] },
+  { jp: 'はなす', en: ['speak', 'talk'] },
+  { jp: 'よむ', en: ['read'] },
+  { jp: 'かく', en: ['write'] },
+  { jp: 'いく', en: ['go'] },
+  { jp: 'くる', en: ['come'] },
+  { jp: 'かえる', en: ['return', 'go back'] },
+  { jp: 'する', en: ['do'] },
+  { jp: 'ある', en: ['exist inanimate'] },
+  { jp: 'いる', en: ['exist animate'] },
+  { jp: 'ねる', en: ['sleep'] },
+  { jp: 'おきる', en: ['wake up'] },
+  { jp: 'はたらく', en: ['work'] },
+  { jp: 'やすむ', en: ['rest'] },
+  { jp: 'かう', en: ['buy'] },
+  { jp: 'うる', en: ['sell'] },
+  { jp: 'まつ', en: ['wait'] },
+  { jp: 'あう', en: ['meet'] },
+  { jp: 'おしえる', en: ['teach'] },
+  { jp: 'ならう', en: ['learn'] },
+  { jp: 'わかる', en: ['understand'] },
+  { jp: 'つかう', en: ['use'] },
+  { jp: 'もつ', en: ['hold', 'have'] },
+  { jp: 'たつ', en: ['stand'] },
+  { jp: 'すわる', en: ['sit'] },
+  { jp: 'はいる', en: ['enter'] },
+  { jp: 'でる', en: ['leave', 'exit'] },
+  { jp: 'あける', en: ['open'] },
+  { jp: 'しめる', en: ['close'] },
+  { jp: 'はじめる', en: ['start', 'begin'] },
+  { jp: 'おわる', en: ['finish', 'end'] },
+  { jp: 'あるく', en: ['walk'] },
+  { jp: 'はしる', en: ['run'] },
+  { jp: 'つくる', en: ['make'] },
+  { jp: 'てつだう', en: ['help'] },
+  { jp: 'あそぶ', en: ['play'] },
+  { jp: 'うたう', en: ['sing'] },
+  { jp: 'およぐ', en: ['swim'] },
+  { jp: 'たかい', en: ['high', 'expensive'] },
+  { jp: 'やすい', en: ['cheap'] },
+  { jp: 'おおきい', en: ['big'] },
+  { jp: 'ちいさい', en: ['small'] },
+  { jp: 'あたらしい', en: ['new'] },
+  { jp: 'ふるい', en: ['old'] },
+  { jp: 'よい', en: ['good'] },
+  { jp: 'わるい', en: ['bad'] },
+  { jp: 'おおい', en: ['many'] },
+  { jp: 'すくない', en: ['few'] },
+  { jp: 'あつい', en: ['hot'] },
+  { jp: 'さむい', en: ['cold weather'] },
+  { jp: 'つめたい', en: ['cold thing'] },
+  { jp: 'ながい', en: ['long'] },
+  { jp: 'みじかい', en: ['short'] },
+  { jp: 'ちかい', en: ['near'] },
+  { jp: 'とおい', en: ['far'] },
+  { jp: 'はやい', en: ['early', 'fast'] },
+  { jp: 'おそい', en: ['late', 'slow'] },
+  { jp: 'しろい', en: ['white'] },
+  { jp: 'くろい', en: ['black'] },
+  { jp: 'あかい', en: ['red'] },
+  { jp: 'あおい', en: ['blue'] },
+  { jp: 'すき', en: ['like'] },
+  { jp: 'きらい', en: ['dislike'] },
+  { jp: 'じょうず', en: ['skillful'] },
+  { jp: 'へた', en: ['unskillful'] },
+  { jp: 'げんき', en: ['healthy', 'energetic'] },
+  { jp: 'ゆうめい', en: ['famous'] },
+  { jp: 'しずか', en: ['quiet'] },
+  { jp: 'べんり', en: ['convenient'] },
+  { jp: 'だいじょうぶ', en: ['all right', 'okay'] },
+  { jp: 'ひつよう', en: ['necessary'] },
+  { jp: 'たべもの', en: ['food'] },
+  { jp: 'のみもの', en: ['drink'] },
+  { jp: 'みず', en: ['water'] },
+  { jp: 'おちゃ', en: ['tea'] },
+  { jp: 'ぎゅうにゅう', en: ['milk'] },
+  { jp: 'ごはん', en: ['rice', 'meal'] },
+  { jp: 'にく', en: ['meat'] },
+  { jp: 'さかな', en: ['fish'] },
+  { jp: 'やさい', en: ['vegetables'] },
+  { jp: 'くだもの', en: ['fruit'] },
+  { jp: 'たまご', en: ['egg'] },
+  { jp: 'ねこ', en: ['cat'] },
+  { jp: 'いぬ', en: ['dog'] },
+  { jp: 'とり', en: ['bird'] },
+  { jp: 'はな', en: ['flower'] },
+  { jp: 'き', en: ['tree'] },
+  { jp: 'おんがく', en: ['music'] },
+  { jp: 'えいが', en: ['movie'] },
+  { jp: 'しゃしん', en: ['photo'] },
+  { jp: 'え', en: ['picture'] },
+  { jp: 'でんわ', en: ['phone'] },
+  { jp: 'ばんごう', en: ['number'] },
+  { jp: 'しつもん', en: ['question'] },
+  { jp: 'こたえ', en: ['answer'] },
+  { jp: 'しけん', en: ['exam', 'test'] },
+  { jp: 'しゅくだい', en: ['homework'] },
+  { jp: 'れんしゅう', en: ['practice'] },
+  { jp: 'いみ', en: ['meaning'] },
+  { jp: 'ことば', en: ['word'] },
+  { jp: 'ぶん', en: ['sentence'] },
+  { jp: 'みぎ', en: ['right'] },
+  { jp: 'ひだり', en: ['left'] },
+  { jp: 'まえ', en: ['front', 'before'] },
+  { jp: 'うしろ', en: ['behind', 'back'] },
+  { jp: 'なか', en: ['inside'] },
+  { jp: 'そと', en: ['outside'] },
+  { jp: 'した', en: ['below', 'under'] },
+  { jp: 'うえ', en: ['above', 'on'] },
+  { jp: 'となり', en: ['next to'] },
+  { jp: 'ちかく', en: ['nearby'] },
+  { jp: 'いっしょ', en: ['together'] },
+  { jp: 'ほんとう', en: ['really', 'truth'] },
+  { jp: 'たぶん', en: ['maybe'] },
+  { jp: 'もう', en: ['already'] },
+  { jp: 'まだ', en: ['still', 'not yet'] },
+  { jp: 'とても', en: ['very'] },
+  { jp: 'すこし', en: ['a little'] },
+  { jp: 'たくさん', en: ['a lot', 'many'] },
+  { jp: 'いつも', en: ['always'] },
+  { jp: 'ときどき', en: ['sometimes'] },
+  { jp: 'こんど', en: ['next time'] },
+  { jp: 'いちばん', en: ['best', 'number one'] },
+  { jp: 'おなじ', en: ['same'] },
+  { jp: 'ちがう', en: ['different'] },
+  { jp: 'たいせつ', en: ['important'] },
+  { jp: 'かんたん', en: ['easy', 'simple'] },
+  { jp: 'むずかしい', en: ['difficult'] },
+  { jp: 'あぶない', en: ['dangerous'] },
+  { jp: 'いたい', en: ['painful'] },
+  { jp: 'ねむい', en: ['sleepy'] },
+  { jp: 'いそがしい', en: ['busy'] },
+  { jp: 'ひま', en: ['free', 'not busy'] },
+  { jp: 'じゅんび', en: ['preparation'] },
+  { jp: 'りょこう', en: ['trip', 'travel'] },
+  { jp: 'よてい', en: ['plan', 'schedule'] }
+];
+
 const STORAGE_KEY = 'hiragana-flashcard-progress';
 const THEME_KEY = 'hiragana-theme';
+
 const rowOptions = document.getElementById('row-options');
 const landingPanel = document.getElementById('landing');
 const quizPanel = document.getElementById('quiz');
 const resultsPanel = document.getElementById('results');
-const gamePanel = document.getElementById('game');
-const startBtn = document.getElementById('start-btn');
-const gameStartBtn = document.getElementById('game-start-btn');
-const gameExitBtn = document.getElementById('game-exit-btn');
-const gameCanvas = document.getElementById('game-canvas');
-const gameChoices = document.getElementById('game-choices');
-const gamePrompt = document.getElementById('game-prompt');
-const gameKana = document.getElementById('game-kana');
-const gameProgress = document.getElementById('game-progress');
-const gameScore = document.getElementById('game-score');
-const gameFeedback = document.getElementById('game-feedback');
-const gamePauseBtn = document.getElementById('game-pause-btn');
-const gameSpeedInput = document.getElementById('game-speed');
-const gameSpeedValue = document.getElementById('game-speed-value');
+const practiceSetup = document.getElementById('practice-setup');
+const practiceGoBtn = document.getElementById('practice-go-btn');
+const practiceCancelBtn = document.getElementById('practice-cancel-btn');
+const practiceStartBtn = document.getElementById('practice-start-btn');
+const vocabStartBtn = document.getElementById('vocab-start-btn');
 const submitBtn = document.getElementById('submit-btn');
 const showAnswerBtn = document.getElementById('show-answer-btn');
 const skipBtn = document.getElementById('skip-btn');
@@ -167,32 +434,13 @@ let sessionTotalAnswered = 0;
 let currentMode = 'mixed';
 let currentPromptType = 'romaji';
 let currentCard = null;
+let activeSessionType = 'practice';
 let mastery = loadMastery();
 let timerInterval = null;
 let timeRemaining = 15;
 let isTimedMode = false;
 let isDarkMode = loadTheme();
 let totalXp = Number(localStorage.getItem('hiragana-xp') || 0);
-let gameDeck = [];
-let gameIndex = 0;
-let gameCoins = 0;
-let gameAnimation = null;
-let gameWallX = 760;
-let gameLastFrame = 0;
-let gameOver = false;
-let gameLane = 1;
-let gameWallDepth = 0;
-let gameWallChoices = [];
-let gamePaused = false;
-
-function getGameSpeed() {
-  return Number(gameSpeedInput.value) * 0.00012;
-}
-
-function updateGameSpeedLabel() {
-  const labels = ['Very slow', 'Slow', 'Relaxed', 'Fast', 'Very fast'];
-  gameSpeedValue.textContent = labels[Number(gameSpeedInput.value) - 1];
-}
 
 function updateXpDisplay() {
   const level = Math.floor(totalXp / 100) + 1;
@@ -206,197 +454,6 @@ function awardXp(amount) {
   totalXp += amount;
   localStorage.setItem('hiragana-xp', String(totalXp));
   updateXpDisplay();
-}
-
-function drawGameScene() {
-  const context = gameCanvas.getContext('2d');
-  context.imageSmoothingEnabled = false;
-  const width = gameCanvas.width;
-  const horizonY = 70;
-  const collisionY = 238;
-  context.fillStyle = '#17213d';
-  context.fillRect(0, 0, width, gameCanvas.height);
-  context.fillStyle = '#263b64';
-  for (let x = 0; x < width; x += 48) context.fillRect(x, 32 + (x % 3) * 8, 24, 5);
-  context.fillStyle = '#f7c948';
-  context.fillRect(60, 52, 8, 8);
-  context.fillRect(68, 44, 8, 8);
-  context.fillStyle = '#344365';
-  context.fillRect(0, horizonY, width, 168);
-  context.fillStyle = '#52628b';
-  context.beginPath();
-  context.moveTo(330, horizonY);
-  context.lineTo(510, horizonY);
-  context.lineTo(width, collisionY);
-  context.lineTo(0, collisionY);
-  context.closePath();
-  context.fill();
-  context.strokeStyle = '#f7c948';
-  context.lineWidth = 4;
-  [0, 1, 2, 3].forEach((line) => {
-    const bottomX = line * 280;
-    const topX = 330 + line * 60;
-    context.beginPath();
-    context.moveTo(topX, horizonY);
-    context.lineTo(bottomX, collisionY);
-    context.stroke();
-  });
-  const wallScale = 0.22 + gameWallDepth * 0.78;
-  const wallWidth = 42 + wallScale * 72;
-  const wallHeight = 36 + wallScale * 92;
-  const wallY = horizonY + (collisionY - horizonY) * gameWallDepth - wallHeight;
-  gameWallChoices.forEach((choice, index) => {
-    const laneCenter = 140 + index * 280;
-    const wallX = laneCenter - wallWidth / 2;
-    context.fillStyle = index === gameLane ? '#ffdf70' : '#ff6b6b';
-    context.fillRect(wallX, wallY, wallWidth, wallHeight);
-    context.fillStyle = '#943f54';
-    context.fillRect(wallX + wallWidth * 0.15, wallY + wallHeight * 0.18, wallWidth * 0.7, 6 * wallScale);
-    context.fillRect(wallX + wallWidth * 0.15, wallY + wallHeight * 0.5, wallWidth * 0.7, 6 * wallScale);
-    context.fillStyle = '#10152b';
-    context.font = `bold ${Math.max(14, 20 * wallScale)}px monospace`;
-    context.textAlign = 'center';
-    context.fillText(choice, laneCenter, wallY + wallHeight * 0.78);
-  });
-  context.fillStyle = '#fff8dc';
-  context.font = 'bold 18px monospace';
-  context.textAlign = 'center';
-  const ballX = 140 + gameLane * 280 - 18;
-  context.fillStyle = '#ffdf70';
-  context.fillRect(ballX, 214, 36, 24);
-  context.fillStyle = '#943f54';
-  context.fillRect(ballX + 12, 222, 12, 8);
-}
-
-function englishClue(card) {
-  const clues = {
-    a: 'A', i: 'E', u: 'OO', e: 'EH', o: 'OH',
-    ka: 'KAH', ki: 'KEY', ku: 'COO', ke: 'KEH', ko: 'COH',
-    sa: 'SAH', shi: 'SHE', su: 'SUE', se: 'SEH', so: 'SOH',
-    ta: 'TAH', chi: 'CHEE', tsu: 'TSOO', te: 'TEH', to: 'TOH'
-  };
-  return `${clues[card.romaji] || card.romaji.toUpperCase()} sound`;
-}
-
-function showGameCard(card) {
-  const clue = englishClue(card);
-  gamePrompt.textContent = 'Move into the lane with the matching Japanese character!';
-  gameKana.textContent = clue;
-  gameProgress.textContent = `STAGE ${gameIndex + 1} / ${gameDeck.length}`;
-  const answerPool = hiraganaRows.aiueo.items.concat(hiraganaRows.k.items, hiraganaRows.s.items, hiraganaRows.t.items)
-    .map(item => item.romaji).filter(answer => answer !== card.romaji);
-  const choices = shuffle([card.kana, ...shuffle(answerPool.map(answer => hiraganaRows.aiueo.items
-    .concat(hiraganaRows.k.items, hiraganaRows.s.items, hiraganaRows.t.items)
-    .find(item => item.romaji === answer)?.kana)).filter(Boolean).slice(0, 2)]);
-  gameWallChoices = choices;
-  gameChoices.innerHTML = '';
-  choices.forEach((choice, index) => {
-    const button = document.createElement('button');
-    button.className = 'game-choice';
-    button.type = 'button';
-    button.innerHTML = `<span>LANE ${index + 1}</span>${choice}`;
-    button.addEventListener('click', () => moveGameLane(index));
-    gameChoices.appendChild(button);
-  });
-  gameFeedback.textContent = 'The walls are coming! Use ← → or tap a lane.';
-  gameFeedback.className = 'game-feedback';
-  gameWallDepth = 0;
-  gameLastFrame = 0;
-  updateLaneSelection();
-  gameAnimation = requestAnimationFrame(rollWall);
-}
-
-function rollWall(timestamp) {
-  if (gameOver || gamePaused || !gameDeck[gameIndex]) return;
-  const elapsed = gameLastFrame ? timestamp - gameLastFrame : 0;
-  gameLastFrame = timestamp;
-  gameWallDepth += elapsed * getGameSpeed();
-  drawGameScene();
-  if (gameWallDepth >= 1) {
-    const isCorrectLane = gameWallChoices[gameLane] === gameDeck[gameIndex].kana;
-    if (isCorrectLane) breakWall();
-    else endGame(true);
-    return;
-  }
-  gameAnimation = requestAnimationFrame(rollWall);
-}
-
-function updateLaneSelection() {
-  [...gameChoices.children].forEach((button, index) => button.classList.toggle('selected', index === gameLane));
-  drawGameScene();
-}
-
-function moveGameLane(lane) {
-  if (gameOver || !gameDeck[gameIndex]) return;
-  gameLane = Math.max(0, Math.min(2, lane));
-  updateLaneSelection();
-}
-
-function toggleGamePause() {
-  if (gameOver || !gameDeck[gameIndex]) return;
-  gamePaused = !gamePaused;
-  gamePauseBtn.textContent = gamePaused ? 'Resume' : 'Pause';
-  gameFeedback.textContent = gamePaused ? 'PAUSED - choose a lane, then resume.' : 'The walls are coming! Use left and right.';
-  if (gamePaused) {
-    cancelAnimationFrame(gameAnimation);
-    gameAnimation = null;
-  } else {
-    gameLastFrame = 0;
-    gameAnimation = requestAnimationFrame(rollWall);
-  }
-}
-
-function breakWall() {
-  cancelAnimationFrame(gameAnimation);
-  gameAnimation = null;
-  gameCoins += 1;
-  awardXp(15);
-  gameFeedback.textContent = '★ Wall broken! +1 coin';
-  gameFeedback.className = 'game-feedback correct';
-  gameScore.textContent = `COINS ${gameCoins}`;
-  setTimeout(() => {
-    gameIndex += 1;
-    if (gameIndex >= gameDeck.length) endGame();
-    else showGameCard(gameDeck[gameIndex]);
-  }, 450);
-}
-
-function startGame() {
-  const selectedRows = getSelectedRows();
-  if (!selectedRows.length) {
-    alert('Please select at least one row before starting.');
-    return;
-  }
-  gameDeck = shuffle(selectedRows.flatMap(row => row.items)).slice(0, 8);
-  gameIndex = 0;
-  gameCoins = 0;
-  gameLane = 1;
-  gameOver = false;
-  gamePaused = false;
-  landingPanel.classList.add('hidden');
-  quizPanel.classList.add('hidden');
-  resultsPanel.classList.add('hidden');
-  gamePanel.classList.remove('hidden');
-  gameScore.textContent = 'COINS 0';
-  gamePauseBtn.textContent = 'Pause';
-  updateGameSpeedLabel();
-  showGameCard(gameDeck[0]);
-}
-
-function endGame(missedWall = false) {
-  if (gameOver) return;
-  gameOver = true;
-  if (gameAnimation) cancelAnimationFrame(gameAnimation);
-  gameAnimation = null;
-  gamePanel.classList.add('hidden');
-  resultsPanel.classList.remove('hidden');
-  finalScoreText.textContent = `${gameCoins} / ${gameDeck.length}`;
-  correctStatText.textContent = String(gameCoins);
-  accuracyStatText.textContent = `${Math.round((gameCoins / gameDeck.length) * 100)}%`;
-  streakStatText.textContent = 'RUN';
-  xpEarnedText.textContent = `+${gameCoins * 15} XP`;
-  scoreSummary.textContent = missedWall ? 'The wall reached the ball. Keep practicing!' : 'Run complete. Your kana power is growing!';
-  weakRowsText.textContent = missedWall ? 'Move faster next run and break every wall.' : 'Replay the course to sharpen your misses.';
 }
 
 function loadMastery() {
@@ -426,6 +483,7 @@ function toggleDarkMode() {
   isDarkMode = !isDarkMode;
   document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
   saveTheme(isDarkMode);
+  darkModeBtn.textContent = isDarkMode ? '☀️' : '🌙';
 }
 
 function initTheme() {
@@ -433,15 +491,14 @@ function initTheme() {
   darkModeBtn.textContent = isDarkMode ? '☀️' : '🌙';
 }
 
-function speakHiragana(kana, romaji) {
+function speakText(text, lang = 'ja-JP') {
   if (!('speechSynthesis' in window)) {
-    alert('Text-to-speech not supported in your browser');
     return;
   }
-  
-  const utterance = new SpeechSynthesisUtterance(kana);
-  utterance.lang = 'ja-JP';
-  utterance.rate = 0.8;
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
+  utterance.rate = 0.84;
   utterance.pitch = 1;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utterance);
@@ -449,16 +506,16 @@ function speakHiragana(kana, romaji) {
 
 function startTimer() {
   if (!isTimedMode) return;
-  
+
   timeRemaining = 15;
   timerDisplay.classList.remove('hidden');
   timerValue.textContent = '15';
-  
+
   clearInterval(timerInterval);
   timerInterval = setInterval(() => {
     timeRemaining -= 1;
     timerValue.textContent = String(timeRemaining);
-    
+
     if (timeRemaining <= 0) {
       clearInterval(timerInterval);
       showFeedback('⏱️ Time is up!', 'incorrect');
@@ -537,14 +594,27 @@ function getSelectedRows() {
 }
 
 function normalizeInput(value) {
-  return value.trim().toLowerCase().replace(/\s+/g, '');
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[.,!?;'"()]/g, '')
+    .replace(/\s+/g, ' ');
 }
 
-function isCorrectAnswer(card, inputValue, promptType) {
-  const normalizedInput = normalizeInput(inputValue);
+function normalizeMeaning(value) {
+  return normalizeInput(value)
+    .replace(/^to\s+/, '')
+    .replace(/^a\s+/, '')
+    .replace(/^an\s+/, '')
+    .replace(/^the\s+/, '')
+    .trim();
+}
+
+function isCorrectPracticeAnswer(card, inputValue, promptType) {
+  const normalizedInput = normalizeInput(inputValue).replace(/\s+/g, '');
 
   if (promptType === 'kana') {
-    return normalizedInput === normalizeInput(card.kana);
+    return normalizedInput === normalizeInput(card.kana).replace(/\s+/g, '');
   }
 
   const accepted = new Set([card.romaji]);
@@ -556,6 +626,11 @@ function isCorrectAnswer(card, inputValue, promptType) {
   return accepted.has(normalizedInput);
 }
 
+function isCorrectVocabAnswer(card, inputValue) {
+  const guess = normalizeMeaning(inputValue);
+  return card.en.some((meaning) => normalizeMeaning(meaning) === guess);
+}
+
 function showFeedback(message, type) {
   feedback.textContent = message;
   feedback.className = `feedback ${type}`;
@@ -563,7 +638,8 @@ function showFeedback(message, type) {
 
 function updateProgress() {
   const currentNumber = Math.min(currentIndex + 1, totalCards);
-  progressText.textContent = `CARD ${currentNumber} / ${totalCards}`;
+  const prefix = activeSessionType === 'practice' ? 'CARD' : 'WORD';
+  progressText.textContent = `${prefix} ${currentNumber} / ${totalCards}`;
   scoreText.textContent = `XP: ${score}`;
   streakText.textContent = `COMBO x${streak}`;
 }
@@ -582,7 +658,7 @@ function getSessionLimit(items) {
   return Math.min(Number(selectedValue), items.length);
 }
 
-function prepareDeck() {
+function preparePracticeDeck() {
   const selectedRows = getSelectedRows();
   let items = selectedRows.flatMap((row) =>
     row.items.map((item) => ({
@@ -593,11 +669,8 @@ function prepareDeck() {
   );
 
   if (reviewWeakCheckbox.checked) {
-    // Spaced repetition: sort by accuracy (worst first) and duplicate weak cards
     items.sort((a, b) => getCardAccuracy(a) - getCardAccuracy(b));
-    
-    // Add weak cards (accuracy < 70%) again to the end for reinforcement
-    const weakCards = items.filter(card => getCardAccuracy(card) < 70);
+    const weakCards = items.filter((card) => getCardAccuracy(card) < 70);
     items = items.concat(weakCards);
   }
 
@@ -606,7 +679,13 @@ function prepareDeck() {
   return items.slice(0, limit);
 }
 
-function getPromptForCard(card) {
+function prepareVocabDeck() {
+  const shuffled = shuffle(vocabWords);
+  const limit = getSessionLimit(shuffled);
+  return shuffled.slice(0, limit);
+}
+
+function renderPracticeCard(card) {
   const promptType = currentMode === 'mixed'
     ? (Math.random() < 0.5 ? 'romaji' : 'kana')
     : currentMode === 'kana-to-romaji'
@@ -614,17 +693,26 @@ function getPromptForCard(card) {
       : 'kana';
 
   currentPromptType = promptType;
+  modeBadge.textContent = currentMode === 'kana-to-romaji' ? 'Kana → Romaji' : currentMode === 'romaji-to-kana' ? 'Romaji → Kana' : 'Mixed';
+
   if (promptType === 'romaji') {
     kanaDisplay.textContent = card.kana;
     promptText.textContent = 'Type the romaji for this hiragana';
     answerInput.placeholder = 'e.g. ki';
-    return card.romaji;
+    return;
   }
 
   kanaDisplay.textContent = card.romaji;
   promptText.textContent = 'Type the hiragana for this romaji';
   answerInput.placeholder = 'e.g. き';
-  return card.kana;
+}
+
+function renderVocabCard(card) {
+  currentPromptType = 'vocab';
+  modeBadge.textContent = 'Vocab';
+  kanaDisplay.textContent = card.jp;
+  promptText.textContent = 'Type the English meaning of this word';
+  answerInput.placeholder = 'e.g. teacher';
 }
 
 function nextCard() {
@@ -634,7 +722,12 @@ function nextCard() {
   }
 
   currentCard = deck[currentIndex];
-  getPromptForCard(currentCard);
+  if (activeSessionType === 'practice') {
+    renderPracticeCard(currentCard);
+  } else {
+    renderVocabCard(currentCard);
+  }
+
   answerInput.value = '';
   answerInput.focus();
   feedback.textContent = '';
@@ -645,19 +738,27 @@ function nextCard() {
 
 function handleCorrectAnswer() {
   score += 1;
-  awardXp(10 + Math.min(streak, 5));
+  awardXp(activeSessionType === 'practice' ? 10 + Math.min(streak, 5) : 12 + Math.min(streak, 5));
   sessionCorrect += 1;
   streak += 1;
   bestStreak = Math.max(bestStreak, streak);
-  updateCardStats(currentCard, true);
-  showFeedback(`Correct! ${currentCard.kana} = ${currentCard.romaji}`, 'correct');
+  if (activeSessionType === 'practice') {
+    updateCardStats(currentCard, true);
+    showFeedback(`Correct! ${currentCard.kana} = ${currentCard.romaji}`, 'correct');
+    return;
+  }
+  showFeedback(`Correct! ${currentCard.jp} = ${currentCard.en[0]}`, 'correct');
 }
 
 function handleWrongAnswer() {
   streak = 0;
-  updateCardStats(currentCard, false);
-  const expected = currentPromptType === 'romaji' ? currentCard.romaji : currentCard.kana;
-  showFeedback(`Not quite. The answer is ${expected}.`, 'incorrect');
+  if (activeSessionType === 'practice') {
+    updateCardStats(currentCard, false);
+    const expected = currentPromptType === 'romaji' ? currentCard.romaji : currentCard.kana;
+    showFeedback(`Not quite. The answer is ${expected}.`, 'incorrect');
+    return;
+  }
+  showFeedback(`Not quite. Meanings: ${currentCard.en.join(', ')}`, 'incorrect');
 }
 
 function finishCurrentCard() {
@@ -682,11 +783,11 @@ function handleAnswerSubmit() {
   if (currentIndex >= deck.length || !currentCard) return;
 
   const userAnswer = answerInput.value;
-  if (!userAnswer.trim()) {
-    return;
-  }
+  if (!userAnswer.trim()) return;
 
-  const isCorrect = isCorrectAnswer(currentCard, userAnswer, currentPromptType);
+  const isCorrect = activeSessionType === 'practice'
+    ? isCorrectPracticeAnswer(currentCard, userAnswer, currentPromptType)
+    : isCorrectVocabAnswer(currentCard, userAnswer);
 
   if (isCorrect) {
     handleCorrectAnswer();
@@ -699,7 +800,13 @@ function handleAnswerSubmit() {
 
 function revealAnswer() {
   if (!currentCard) return;
-  answerInput.value = currentPromptType === 'romaji' ? currentCard.romaji : currentCard.kana;
+
+  if (activeSessionType === 'practice') {
+    answerInput.value = currentPromptType === 'romaji' ? currentCard.romaji : currentCard.kana;
+  } else {
+    answerInput.value = currentCard.en[0];
+  }
+
   handleWrongAnswer();
   finishCurrentCard();
 }
@@ -707,7 +814,13 @@ function revealAnswer() {
 function skipCard() {
   if (!currentCard) return;
   streak = 0;
-  showFeedback(`Skipped. The answer was ${currentPromptType === 'romaji' ? currentCard.romaji : currentCard.kana}.`, 'incorrect');
+
+  if (activeSessionType === 'practice') {
+    showFeedback(`Skipped. The answer was ${currentPromptType === 'romaji' ? currentCard.romaji : currentCard.kana}.`, 'incorrect');
+  } else {
+    showFeedback(`Skipped. Meanings: ${currentCard.en.join(', ')}`, 'incorrect');
+  }
+
   finishCurrentCard();
 }
 
@@ -721,40 +834,49 @@ function endQuiz() {
   correctStatText.textContent = String(sessionCorrect);
   accuracyStatText.textContent = `${accuracy}%`;
   streakStatText.textContent = String(bestStreak);
-  xpEarnedText.textContent = `+${score * 10} XP`;
+  xpEarnedText.textContent = `+${score * (activeSessionType === 'practice' ? 10 : 12)} XP`;
 
-  const weakRows = Object.entries(hiraganaRows)
-    .filter(([key, row]) => {
-      const rowAccuracy = row.items.reduce((sum, card) => sum + getCardAccuracy(card), 0) / row.items.length;
-      return row.items.length > 0 && rowAccuracy < 100;
-    })
-    .sort(([aKey, aRow], [bKey, bRow]) => {
-      const aAvg = aRow.items.reduce((sum, card) => sum + getCardAccuracy(card), 0) / aRow.items.length;
-      const bAvg = bRow.items.reduce((sum, card) => sum + getCardAccuracy(card), 0) / bRow.items.length;
-      return aAvg - bAvg;
-    })
-    .slice(0, 3)
-    .map(([key, row]) => row.label)
-    .join(', ');
+  if (activeSessionType === 'practice') {
+    const weakRows = Object.entries(hiraganaRows)
+      .filter(([, row]) => {
+        const rowAccuracy = row.items.reduce((sum, card) => sum + getCardAccuracy(card), 0) / row.items.length;
+        return row.items.length > 0 && rowAccuracy < 100;
+      })
+      .sort(([, aRow], [, bRow]) => {
+        const aAvg = aRow.items.reduce((sum, card) => sum + getCardAccuracy(card), 0) / aRow.items.length;
+        const bAvg = bRow.items.reduce((sum, card) => sum + getCardAccuracy(card), 0) / bRow.items.length;
+        return aAvg - bAvg;
+      })
+      .slice(0, 3)
+      .map(([, row]) => row.label)
+      .join(', ');
 
-  weakRowsText.textContent = weakRows
-    ? `Focus next: ${weakRows}`
-    : 'Your selected kana are already looking strong!';
+    weakRowsText.textContent = weakRows
+      ? `Focus next: ${weakRows}`
+      : 'Your selected kana are already looking strong!';
+  } else {
+    weakRowsText.textContent = `Vocab mode bank size: ${vocabWords.length} words.`;
+  }
 
   const percentage = totalCards ? Math.round((score / totalCards) * 100) : 0;
   scoreSummary.textContent = `${percentage}% accuracy. ${percentage >= 80 ? 'Amazing work!' : percentage >= 60 ? 'Good job!' : 'Keep practicing!'}`;
 }
 
-function startQuiz() {
-  const selectedRows = getSelectedRows();
+function launchSession(type) {
+  activeSessionType = type;
 
-  if (selectedRows.length === 0) {
-    alert('Please select at least one row before starting.');
-    return;
+  if (type === 'practice') {
+    const selectedRows = getSelectedRows();
+    if (selectedRows.length === 0) {
+      alert('Please select at least one row before starting practice.');
+      return;
+    }
+    deck = preparePracticeDeck();
+  } else {
+    deck = prepareVocabDeck();
   }
 
   isTimedMode = timedModeCheckbox.checked;
-  deck = prepareDeck();
   currentIndex = 0;
   score = 0;
   streak = 0;
@@ -769,8 +891,20 @@ function startQuiz() {
 
   scoreText.textContent = 'XP: 0';
   streakText.textContent = 'COMBO x0';
-  progressText.textContent = `CARD 0 / ${totalCards}`;
+  progressText.textContent = `${type === 'practice' ? 'CARD' : 'WORD'} 0 / ${totalCards}`;
   nextCard();
+}
+
+function openPracticeSetup() {
+  practiceSetup.classList.remove('hidden');
+  practiceStartBtn.classList.add('hidden');
+  vocabStartBtn.classList.add('hidden');
+}
+
+function closePracticeSetup() {
+  practiceSetup.classList.add('hidden');
+  practiceStartBtn.classList.remove('hidden');
+  vocabStartBtn.classList.remove('hidden');
 }
 
 function resetSessionState() {
@@ -793,9 +927,8 @@ function resetSessionState() {
 }
 
 function exitSession() {
-  const shouldExit = window.confirm('Abort this study session and return to the row selection screen?');
+  const shouldExit = window.confirm('Abort this session and return to home?');
   if (!shouldExit) return;
-
   resetSessionState();
   resetToLanding();
 }
@@ -804,16 +937,10 @@ function resetToLanding() {
   landingPanel.classList.remove('hidden');
   quizPanel.classList.add('hidden');
   resultsPanel.classList.add('hidden');
-  gamePanel.classList.add('hidden');
+  closePracticeSetup();
   answerInput.value = '';
   feedback.textContent = '';
   feedback.className = 'feedback';
-}
-
-function exitGame() {
-  if (gameAnimation) cancelAnimationFrame(gameAnimation);
-  gameAnimation = null;
-  resetToLanding();
 }
 
 function setAllRows(selected) {
@@ -823,7 +950,7 @@ function setAllRows(selected) {
 }
 
 function resetProgress() {
-  const shouldReset = window.confirm('Reset all saved hiragana progress?');
+  const shouldReset = window.confirm('Reset saved practice progress?');
   if (!shouldReset) return;
 
   localStorage.removeItem(STORAGE_KEY);
@@ -831,34 +958,29 @@ function resetProgress() {
   alert('Progress reset successfully.');
 }
 
-startBtn.addEventListener('click', startQuiz);
-gameStartBtn.addEventListener('click', startGame);
-gameExitBtn.addEventListener('click', exitGame);
-gamePauseBtn.addEventListener('click', toggleGamePause);
-gameSpeedInput.addEventListener('input', updateGameSpeedLabel);
+practiceStartBtn.addEventListener('click', openPracticeSetup);
+practiceGoBtn.addEventListener('click', () => launchSession('practice'));
+practiceCancelBtn.addEventListener('click', closePracticeSetup);
+vocabStartBtn.addEventListener('click', () => launchSession('vocab'));
 submitBtn.addEventListener('click', handleAnswerSubmit);
-restartBtn.addEventListener('click', startQuiz);
+restartBtn.addEventListener('click', () => launchSession(activeSessionType));
 backBtn.addEventListener('click', resetToLanding);
 showAnswerBtn.addEventListener('click', revealAnswer);
 skipBtn.addEventListener('click', skipCard);
 exitBtn.addEventListener('click', exitSession);
 darkModeBtn.addEventListener('click', toggleDarkMode);
 audioBtn.addEventListener('click', () => {
-  if (currentCard) {
-    speakHiragana(currentCard.kana, currentCard.romaji);
+  if (!currentCard) return;
+  if (activeSessionType === 'practice') {
+    speakText(currentCard.kana, 'ja-JP');
+  } else {
+    speakText(currentCard.jp, 'ja-JP');
   }
 });
 answerInput.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
     handleAnswerSubmit();
   }
-});
-document.addEventListener('keydown', (event) => {
-  if (gamePanel.classList.contains('hidden') || !['1', '2', '3', 'ArrowLeft', 'ArrowRight'].includes(event.key)) return;
-  event.preventDefault();
-  if (event.key === 'ArrowLeft') moveGameLane(gameLane - 1);
-  else if (event.key === 'ArrowRight') moveGameLane(gameLane + 1);
-  else moveGameLane(Number(event.key) - 1);
 });
 
 modeButtons.forEach((button) => {

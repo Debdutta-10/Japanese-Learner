@@ -22,11 +22,16 @@
           <p class="eyebrow">[ QUEST 01 ] Japanese study</p>
           <h1>Hiragana Flashcard Learner</h1>
           <p class="subtitle">
-            Pick the rows you want to practice, then build real momentum with focused repetition.
+            Choose your study path and train daily with an 8-bit style quest flow.
           </p>
         </div>
 
-        <div class="selection-panel">
+        <div class="path-selector" aria-label="Study paths">
+          <button id="practice-start-btn" class="primary-btn" type="button">Hiragana Practice</button>
+          <button id="vocab-start-btn" class="vocab-start-btn" type="button">Hiragana Vocab</button>
+        </div>
+
+        <div id="practice-setup" class="selection-panel hidden">
           <h2>Choose rows to learn</h2>
 
           <div class="selection-toolbar">
@@ -72,30 +77,11 @@
             </div>
           </div>
 
-          <button id="start-btn" class="primary-btn">▶ Start quest</button>
-          <button id="game-start-btn" class="game-start-btn" type="button">● Roll & learn</button>
+          <div class="practice-actions">
+            <button id="practice-go-btn" class="primary-btn" type="button">Start Practice</button>
+            <button id="practice-cancel-btn" class="secondary-btn" type="button">Back</button>
+          </div>
         </div>
-      </section>
-
-      <section id="game" class="panel hidden">
-        <div class="game-topbar">
-          <span id="game-progress">STAGE 1 / 8</span>
-          <span id="game-score">COINS 0</span>
-          <button id="game-exit-btn" class="danger-btn" type="button">Exit game</button>
-        </div>
-        <div class="game-intro">
-          <p class="eyebrow">[ KANA RUNNER ]</p>
-          <h2 id="game-prompt">Break the wall with the right Japanese answer!</h2>
-          <div id="game-kana" class="game-kana">a</div>
-        </div>
-        <canvas id="game-canvas" width="840" height="300" aria-label="Pixel art rolling ball and incoming Japanese answer wall"></canvas>
-        <div class="game-controls" aria-label="Game controls">
-          <button id="game-pause-btn" class="control-btn" type="button">Pause</button>
-          <label for="game-speed">Speed <span id="game-speed-value">Slow</span></label>
-          <input id="game-speed" type="range" min="1" max="5" value="2" />
-        </div>
-        <div id="game-choices" class="game-choices" aria-label="Answer choices"></div>
-        <p id="game-feedback" class="game-feedback" aria-live="polite">Choose a block to roll the ball.</p>
       </section>
 
       <section id="quiz" class="panel hidden">
